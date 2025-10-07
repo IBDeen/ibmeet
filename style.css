@@ -1,0 +1,126 @@
+body {
+  background: #0a0a0a;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  margin-top: 20vh;
+}
+
+h1 span {
+  color: #007bff;
+}
+
+button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  margin: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Loader Animation */
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.spinner {
+  border: 6px solid #333;
+  border-top: 6px solid #007bff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* Meeting container */
+.meeting-container {
+  padding: 20px;
+}
+
+#meetingVideo {
+  margin: 20px auto;
+  width: 80%;
+  height: 60vh;
+  background: #111;
+  border: 2px solid #007bff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Floating chat button */
+#chatButton {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+#chatBox {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  background: #1a1a1a;
+  border: 1px solid #007bff;
+  border-radius: 10px;
+  width: 300px;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#chatMessages {
+  flex-grow: 1;
+  padding: 10px;
+  text-align: left;
+  overflow-y: auto;
+}
+
+#chatInput {
+  border: none;
+  padding: 8px;
+  background: #222;
+  color: white;
+}
+
+#sendBtn {
+  background: #007bff;
+  border: none;
+  padding: 8px;
+  color: white;
+  cursor: pointer;
+}
