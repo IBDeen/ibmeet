@@ -1,261 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IBMeet – Powered by IBDeen</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    body {
-      background: radial-gradient(circle at top left, #4b0082, #000);
-      color: #fff;
-      text-align: center;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
-
-    p {
-      font-size: 1.1rem;
-      opacity: 0.85;
-      margin-bottom: 20px;
-    }
-
-    .btn {
-      background: linear-gradient(90deg, #ffcc00, #ff6600);
-      color: #4b0082;
-      border: none;
-      padding: 12px 25px;
-      font-size: 1rem;
-      font-weight: 600;
-      border-radius: 10px;
-      margin: 10px;
-      cursor: pointer;
-      transition: 0.4s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(255, 204, 0, 0.6);
-    }
-
-    input {
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      width: 200px;
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    #meet {
-      width: 90%;
-      height: 80vh;
-      margin-top: 20px;
-      display: none;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
-    }
-
-    /* Loading Animation */
-    #loading {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .spinner {
-      border: 6px solid rgba(255, 255, 255, 0.2);
-      border-top: 6px solid #ffcc00;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      animation: spin 1s linear infinite;
-      margin-bottom: 10px;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Floating Chat Button */
-    #chatButton {
-      display: none;
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      background: linear-gradient(135deg, #ffcc00, #ff6600);
-      color: #4b0082;
-      border: none;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      font-size: 26px;
-      cursor: pointer;
-      box-shadow: 0 0 15px rgba(255, 204, 0, 0.8);
-      transition: transform 0.3s ease;
-    }
-    #chatButton:hover {
-      transform: scale(1.1);
-    }
-
-    #chatPopup {
-      display: none;
-      position: fixed;
-      bottom: 100px;
-      right: 30px;
-      width: 250px;
-      background: #fff;
-      color: #000;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-      overflow: hidden;
-      animation: fadeIn 0.3s ease;
-    }
-
-    #chatPopup header {
-      background: #4b0082;
-      color: #fff;
-      padding: 10px;
-      font-weight: bold;
-    }
-
-    #chatPopup .messages {
-      height: 200px;
-      overflow-y: auto;
-      padding: 10px;
-    }
-
-    #chatPopup input {
-      width: 100%;
-      padding: 8px;
-      border: none;
-      border-top: 1px solid #ccc;
-      outline: none;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
-  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IBMeet</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-  <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#007bff">
-  
 <body>
-  <div id="home">
-    <h1>Welcome to <span style="color:#ffcc00;">IBMeet</span></h1>
-    <p>Where conversations connect the world 🌍</p>
-    <button class="btn" onclick="startMeeting()">Start Meeting</button>
-    <br>
-    <input type="text" id="roomInput" placeholder="Enter room name" />
-    <br>
-    <button class="btn" onclick="joinMeeting()">Join Meeting</button>
+  <div class="container">
+    <h1>Welcome to <span>IBMeet</span></h1>
+    <p>Connect. Meet. Share.</p>
+
+    <div class="buttons">
+      <button id="hostBtn">🎙️ Host a Meeting</button>
+      <button id="joinBtn">🔗 Join a Meeting</button>
+    </div>
   </div>
 
-  <div id="loading">
-    <div class="spinner"></div>
-    <p>Connecting to your meeting...</p>
-  </div>
-
-  <div id="meet"></div>
-
-  <button id="chatButton" onclick="toggleChat()">💬</button>
-
-  <div id="chatPopup">
-    <header>Chat</header>
-    <div class="messages" id="messages"></div>
-    <input type="text" id="chatInput" placeholder="Type a message..." onkeydown="sendMessage(event)">
-  </div>
-
-  <script src="https://meet.jit.si/external_api.js"></script>
   <script>
-    let api = null;
-
-    function startMeeting() {
-      const room = "IBMeet_" + Math.random().toString(36).substring(7);
-      connectMeeting(room);
+    // Generate random meeting ID
+    function generateMeetingID() {
+      return Math.random().toString(36).substring(2, 8).toUpperCase();
     }
 
-    function joinMeeting() {
-      const room = document.getElementById("roomInput").value.trim();
-      if (room) {
-        connectMeeting(room);
-      } else {
-        alert("Please enter a room name.");
+    document.getElementById('hostBtn').addEventListener('click', () => {
+      const meetingID = generateMeetingID();
+      const meetingLink = `${window.location.origin}/meeting.html?id=${meetingID}`;
+      alert("Share this meeting link:\n" + meetingLink);
+      window.location.href = meetingLink;
+    });
+
+    document.getElementById('joinBtn').addEventListener('click', () => {
+      const meetingID = prompt("Enter meeting ID:");
+      if (meetingID) {
+        window.location.href = `${window.location.origin}/meeting.html?id=${meetingID}`;
       }
-    }
-
-    function connectMeeting(room) {
-      document.getElementById("home").style.display = "none";
-      document.getElementById("loading").style.display = "flex";
-
-      setTimeout(() => {
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("meet").style.display = "block";
-        document.getElementById("chatButton").style.display = "block";
-
-        const domain = "meet.jit.si";
-        const options = {
-          roomName: room,
-          parentNode: document.querySelector('#meet'),
-          width: "100%",
-          height: "100%",
-          interfaceConfigOverwrite: {
-            SHOW_JITSI_WATERMARK: false,
-            SHOW_BRAND_WATERMARK: false,
-          },
-        };
-        api = new JitsiMeetExternalAPI(domain, options);
-      }, 2000);
-    }
-
-    // Floating chat popup
-    function toggleChat() {
-      const chat = document.getElementById("chatPopup");
-      chat.style.display = (chat.style.display === "block") ? "none" : "block";
-    }
-
-    function sendMessage(event) {
-      if (event.key === "Enter") {
-        const input = document.getElementById("chatInput");
-        const msgBox = document.getElementById("messages");
-        if (input.value.trim() !== "") {
-          const msg = document.createElement("div");
-          msg.textContent = "You: " + input.value;
-          msgBox.appendChild(msg);
-          msgBox.scrollTop = msgBox.scrollHeight;
-          input.value = "";
-        }
-      }
-    }
+    });
   </script>
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('✅ Service Worker Registered!'))
-      .catch((err) => console.log('❌ Service Worker Error:', err));
-  }
-</script>
 </body>
-      </html>
+</html>
