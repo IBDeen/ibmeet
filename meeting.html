@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IBMeet Room</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="loader" id="loader">
+    <div class="spinner"></div>
+    <p>Starting your meeting...</p>
+  </div>
+
+  <div class="meeting-container hidden" id="meetingContainer">
+    <h1>Meeting ID: <span id="meetingID"></span></h1>
+    <div id="meetingVideo">🎥 Meeting Video Stream Area</div>
+    
+    <!-- Floating chat button -->
+    <button id="chatButton">💬</button>
+    <div id="chatBox" class="hidden">
+      <div id="chatMessages"></div>
+      <input type="text" id="chatInput" placeholder="Type message...">
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+
+  <script>
+    // Loader effect
+    window.addEventListener('load', () => {
+      const loader = document.getElementById('loader');
+      const meetingContainer = document.getElementById('meetingContainer');
+      setTimeout(() => {
+        loader.style.display = 'none';
+        meetingContainer.classList.remove('hidden');
+      }, 2500);
+    });
+
+    // Display meeting ID from URL
+    const params = new URLSearchParams(window.location.search);
+    document.getElementById('meetingID').innerText = params.get('id') || "Unknown";
+
+    // Chat button toggle
+    const chatButton = document.getElementById('chatButton');
+    const chatBox = document.getElementById('chatBox');
+    chatButton.addEventListener('click', () => chatBox.classList.toggle('hidden'));
+
+    // Simple local chat system
+    const sendBtn = document.getElementById('sendBtn');
+    const chatInput = document.getElementById('chatInput');
+    const chatMessages = document.getElementById('chatMessages');
+
+    sendBtn.addEventListener('click', () => {
+      const msg = chatInput.value.trim();
+      if (msg) {
+        const div = document.createElement('div');
+        div.textContent = "You: " + msg;
+        chatMessages.appendChild(div);
+        chatInput.value = '';
+      }
+    });
+  </script>
+</body>
+</html>
